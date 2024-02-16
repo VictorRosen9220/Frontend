@@ -1,0 +1,40 @@
+//Kursus imperativ programmering
+//Opgave: GET
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET Request Eksempel</title>
+    <style>
+        /* Gad ikke lave CSs #boring! */
+    </style>
+</head>
+<body>
+    <div id="result"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // APi request
+            fetch('https://api.example.com/data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    
+                    const resultElement = document.getElementById('result');
+                    data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = item.name;
+                        resultElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+
+//Kursus imperativ programmering
+//Produkt liste, søgning, sideindeling
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkt list eksempel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <input type="search" id="searchInput" placeholder="Search...">
+
+    <ul id="productList">
+        
+    </ul>
+
+    <div class="pagination">
+    
+    </div>
+
+    <script>
+        
+        const products = [
+            { id: 1, name: 'Produkt 1', price: 12.99 },
+            { id: 2, name: 'Produkt 2', price: 25.50 },
+            
+        ];
+
+        
+        $('#searchInput').on('keyup', _.debounce(function() {
+            const searchTerm = $(this).val().toLowerCase();
+            filterProducts(searchTerm);
+        }, 300));
+
+        
+        const itemsPerPage = 6;
+        let currentPage = 1;
+
+        function displayPagination() {
+            const totalPages = Math.ceil(products.length / itemsPerPage);
+
+            $('.pagination').empty();
+            for (let i = 1; i <= totalPages; i++) {
+                const button = $('<button>').text(i).data('page', i);
+                if (i === currentPage) {
+                    button.prop('disabled', true);
+                }
+                button.click(function() {
+                    currentPage = $(this).data('page');
+                    displayProducts();
+                });
+                $('.pagination').append(button);
+            }
+        }
+
+        function filterProducts(searchTerm) {
+            const filtered = _.filter(products, product =>
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            displayProducts(filtered);
+        }
+
+        function displayProducts(filteredProducts = products) {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedProducts = filteredProducts.slice(start, end);
+
+            $('#productList').empty();
+            paginatedProducts.forEach(product => {
+                const listItem = $('<li>').text(`${product.name} - $${product.price}`);
+                $('#productList').append(listItem);
+            });
+
+            displayPagination();
+        }
+
+        
+        displayProducts();
+    </script>
+</body>
+</html>

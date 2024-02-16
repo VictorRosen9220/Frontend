@@ -1,0 +1,47 @@
+//Kursus imperativ programmering
+//Opgave: POST, GET
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST Request eksempel</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const formData = new FormData(document.getElementById('myForm'));
+
+            
+            fetch('https://api.example.com/users', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => console.log('Data submitted successfully:', data))
+            .catch(error => console.error('Error submitting data:', error));
+        }
+    </script>
+</body>
+</html>

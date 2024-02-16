@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opgave eksempel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <form id="signUpForm" action="/users" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="uid">Uid:</label>
+        <input type="text" id="uid" name="uid" required>
+
+        <input type="hidden" name="_method" id="_method">
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <button id="putButton">Update User</button>
+    <button id="patchButton">Partial Update User</button>
+    <button id="deleteButton">Delete User</button>
+
+    <script>
+        
+        $('form').submit(function(event) {
+            event.preventDefault();
+
+            const method = $(this).find('input[name="_method"]').val();
+
+            if (method === 'PUT') {
+                
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'PUT',
+                     $(this).serialize(),
+                    success: function(data) {
+                        console.log('PUT request successful:', data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('PUT request error:', error);
+                    }
+                });
+            } else if (method === 'PATCH') {
+                
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'PATCH',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        console.log('PATCH request successful:', data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('PATCH request error:', error);
+                    }
+                } 
+                )
+            }
+        }
+        )
